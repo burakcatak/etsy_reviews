@@ -27,3 +27,12 @@ bundle exec functions-framework-ruby --target perform
 ```
 http://localhost:8080/?url=https://www.etsy.com/shop/barwoodshop/reviews&api_key=YOUR_PAGE2API_KEY&max_pages=5
 ```
+
+## Deploy to Google Cloud
+
+1. Create a project named: `page2api`
+2. Deploy
+
+```bash
+./deploy
+```
