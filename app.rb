@@ -16,9 +16,9 @@ FunctionsFramework.http "perform" do |request|
   payload = {
     wait_for: "[data-region=review]",
     real_browser: true,
+    premium_proxy: "us",
     raw: true,
     api_key: api_key,
-    premium_proxy: "us",
     parse: {
       reviews: [
         {
@@ -39,7 +39,7 @@ FunctionsFramework.http "perform" do |request|
     payload: payload.deep_merge({
       url: url,
       parse: {
-        pages: "js >> ZG9jdW1lbnQucXVlcnlTZWxlY3RvcigiW2RhdGEtcmV2aWV3cy1wYWdpbmF0aW9uXSAud3Qtc2hvdy14cy53dC1oaWRlLW1kIHVsIGxpOm50aC1vZi10eXBlKDIpIikuaW5uZXJUZXh0Lm1hdGNoKC9vZiAoXGQrKS8pWzFd"
+        pages: "js >> TWF0aC5jZWlsKHBhcnNlSW50KGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi5yZXZpZXdzLXRvdGFsIGRpdjpsYXN0LW9mLXR5cGUiKT8uaW5uZXJUZXh0Py5yZXBsYWNlKCcoJywgJycpPy5yZXBsYWNlKCcpJywgJycpIHx8IDEpIC8gMTQp",
       }
     }).to_json,
     url: api_url,

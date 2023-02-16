@@ -1,0 +1,9 @@
+gcloud functions deploy etsy \
+  --entry-point=perform \
+  --runtime=ruby30 \
+  --memory=2GB \
+  --timeout=120 \
+  --trigger-http \
+  --allow-unauthenticated \
+  --max-instances 10 \
+  --project=page2api \
