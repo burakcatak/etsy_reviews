@@ -16,11 +16,11 @@ bundle exec functions-framework-ruby --target perform
 
 ## Params
 
-**api_key** - Page2API api key
-**url** - etsy reviews page
-**pages_per_batch** - pages per batch, default: 10
-**max_pages** -  max pages, default: 20
-**concurrency** - concurrency, default: 1
+**api_key** - Page2API api key   
+**url** - etsy reviews page   
+**pages_per_batch** - pages per batch, default: 10   
+**max_pages** -  max pages, default: 20   
+**concurrency** - concurrency, default: 1   
 
 ## Test locally
 
