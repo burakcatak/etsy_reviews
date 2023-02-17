@@ -14,9 +14,7 @@ FunctionsFramework.http "perform" do |request|
   reviews = []
 
   payload = {
-    wait_for: "[data-region=review]",
-    real_browser: true,
-    premium_proxy: "us",
+    datacenter_proxy: "eu",
     raw: true,
     api_key: api_key,
     parse: {
@@ -39,7 +37,7 @@ FunctionsFramework.http "perform" do |request|
     payload: payload.deep_merge({
       url: url,
       parse: {
-        pages: "js >> TWF0aC5jZWlsKHBhcnNlSW50KGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoIi5yZXZpZXdzLXRvdGFsIGRpdjpsYXN0LW9mLXR5cGUiKT8uaW5uZXJUZXh0Py5yZXBsYWNlKCcoJywgJycpPy5yZXBsYWNlKCcpJywgJycpIHx8IDEpIC8gMTQp",
+        reviews_count: ".stars + span >> text",
       }
     }).to_json,
     url: api_url,
@@ -49,7 +47,7 @@ FunctionsFramework.http "perform" do |request|
   data = JSON.parse(response)
 
   reviews += data['reviews']
-  pages = data['pages'].to_i
+  pages = data['reviews_count'][1..-1].to_i / 14
 
   return reviews.to_json if [0, 1].include?(pages)
   return reviews.to_json if max_pages == 1
