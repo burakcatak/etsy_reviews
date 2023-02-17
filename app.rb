@@ -15,6 +15,7 @@ FunctionsFramework.http "perform" do |request|
 
   payload = {
     datacenter_proxy: "eu",
+    real_browser: false,
     raw: true,
     api_key: api_key,
     parse: {
