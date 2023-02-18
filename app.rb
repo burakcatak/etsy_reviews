@@ -16,7 +16,6 @@ FunctionsFramework.http "perform" do |request|
   payload = {
     datacenter_proxy: "eu",
     real_browser: false,
-    raw: true,
     api_key: api_key,
     parse: {
       reviews: [
@@ -47,8 +46,13 @@ FunctionsFramework.http "perform" do |request|
 
   data = JSON.parse(response)
 
-  reviews += data['reviews']
-  pages = data['reviews_count'][1..-1].to_i / 14
+  parsed_reviews = data.dig('result', 'reviews')
+
+  if parsed_reviews.is_a?(Array)
+    reviews += parsed_reviews
+  end
+
+  pages = data.dig('result', 'reviews_count')[1..-1].to_i / 14
 
   return reviews.to_json if [0, 1].include?(pages)
   return reviews.to_json if max_pages == 1
@@ -62,22 +66,44 @@ FunctionsFramework.http "perform" do |request|
   end
 
   urls.in_groups_of(pages_per_batch, false) do |group|
-    response = RestClient::Request.execute(
-      method: :post,
-      payload: payload.deep_merge({
-        batch: {
-          urls: group,
-          merge_results: true,
-          concurrency: concurrency
-        }
-      }).to_json,
-      url: api_url,
-      headers: { "Content-type" => "application/json" },
-    ).body
+    @retried = false
 
-    data = JSON.parse(response)
+    begin
+      response = RestClient::Request.execute(
+        method: :post,
+        payload: payload.deep_merge({
+          batch: {
+            urls: group,
+            merge_results: true,
+            concurrency: concurrency
+          }
+        }).to_json,
+        url: api_url,
+        headers: { "Content-type" => "application/json" },
+      ).body
 
-    reviews += data['reviews']
+      data = JSON.parse(response)
+
+      parsed_reviews = data.dig('result', 'reviews')
+
+      if parsed_reviews.is_a?(Array)
+        reviews += parsed_reviews
+      end
+    rescue => error
+      puts("Error: #{error.message}")
+      puts(response)
+
+      if @retried
+        puts('Skipping batch')
+
+        next
+      else
+        puts('Retrying')
+
+        @retried = true
+        retry
+      end
+    end
   end
 
   reviews.to_json
